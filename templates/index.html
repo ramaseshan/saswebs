@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>This is home page</title>
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+	<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<link href="/static/js/select2-3.5.1/select2.css" rel="stylesheet"/>
+	<script src="/static/js/select2-3.5.1/select2.js"></script>
+</head>
+<style>
+	.container{
+		padding : 60px;
+	}
+</style>
+<body class="container">
+
+	{%load related_products%}
+	<select id="search_value">
+		{%for p in products%}
+			<option id="{{p.pid}}">{{p.p_name}}</option>
+		{%endfor%}
+	</select>
+	<br />
+	<br />
+	<button id="search" class="btn btn-primary btn-block">Search</button>
+
+	<br />
+	<br />
+	<br />
+	{%if prod%}
+	<div class="well">
+		{{prod.p_name}}
+	</div>
+
+	{%for r in related%}
+		{{r}}
+	{%endfor%}
+
+	{%endif%}
+
+<script>
+	$("#search").click(function(){
+		var prod = $("#search_value option:selected").attr('id');
+		
+		location.href="/search/"+prod
+	});
+	$('#search_value').select2();
+</script>
+
+
+</body>
+
+</html>
+
