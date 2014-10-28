@@ -14,7 +14,3 @@ urlpatterns = patterns('',
     url(r'^search/(?P<prod_id>[-\w]+)$', 'sabwebs.views.home', name='home'),
     url(r'^get_products/$', 'sabwebs.views.get_products', name='get_products'),
 )
-import debug_toolbar
-urlpatterns += patterns('',
-    url(r'^__debug__/', include(debug_toolbar.urls)),
-)
