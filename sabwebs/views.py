@@ -20,7 +20,7 @@ def home(request,prod_id=None):
 		related = product.objects.filter(
 				Q(p_feature1__startswith=p.p_feature1) | Q(p_feature2__startswith=p.p_feature2) |
 				Q(p_price__lte=max_elevation) , Q(p_price__gte=min_elevation)
-			).exclude(pid=prod_id)
+			).exclude(pid=prod_id)[:10]
 		return render_to_response('index.html', {'prod': p,'products':products,'related':related})
 	else:
 		return render_to_response('index.html',{'products':products})

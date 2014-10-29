@@ -1,44 +1,141 @@
 {% load staticfiles %}
 <html>
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="img/favicon.ico">
+	
 	<title>This is home page</title>
+	
 	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
-	<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
-	<script src="/static/js/bootstrap.min.js"></script>
-	<link href="/static/js/select2-3.5.1/select2.css" rel="stylesheet"/>
-	<script src="/static/js/select2-3.5.1/select2.js"></script>
+	<!-- Animate CSS -->
+	<link href="/static/css/animate.css" rel="stylesheet">
+	<link rel="stylesheet" href="/static/css/sabwebs.css">
+	<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
 </head>
-<style>
-	.container{
-		padding : 60px;
-	}
-</style>
-<body class="container">
 
-	{%load related_products%}
-	<select id="search_value">
-		{%for p in products%}
-			<option id="{{p.pid}}">{{p.p_name}}</option>
-		{%endfor%}
-	</select>
-	<br />
-	<br />
-	<button id="search" class="btn btn-primary btn-block">Search</button>
+<body data-spy="scroll" data-target=".navbar-fixed-top">
 
-	<br />
-	<br />
-	<br />
-	{%if prod%}
-	<div class="well">
-		{{prod.p_name}}
+	
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</button>
+			<li class="page-scroll"><a href="#home-slider" class="navbar-brand">MobiCompare</a></li>
+		</div>
+		<!--/.nav-collapse -->
+	</div>
+</div>
+
+
+<!-- INTRO - HOMEPAGE
+================================================== -->
+<section style="background-image:url(/static/img/intro.jpg); height:600px;padding:0px;">
+<ul class="slides">
+	<li class="home-slide">
+	<div class="flex-caption transparent light-font center">
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<p class="home-slide-content bounceIn animated" data-wow-delay="2s" data-wow-duration="4s">
+			 Mobile <span class="highlight"> Search</span> made easy
+		</p>
+		<p class="home-slide-slide bounceIn animated" data-wow-delay="2s" data-wow-duration="4s">
+			{%load related_products%}
+
+			<br />
+			<br />
+			<select id="search_value" multiple="multiple" style="width:600px;">
+				{%for p in products%}
+					<option id="{{p.pid}}">{{p.p_name}}</option>
+				{%endfor%}
+			</select>
+			<br />
+			<br />
+			<button id="search" class="btn btn-primary" style="width:600px;"><strong>Search</strong></button>
+		</p>
 	</div>
 
-	{%for r in related%}
-		{{r}}
-	{%endfor%}
+	</li>
+</ul>
 
-	{%endif%}
+
+</section>
+
+<!-- End of Home SCreen-->
+
+
+<!-- PRICING
+================================================== -->
+<section id="pricing">
+	<div class="container">
+		{%if prod%}
+			<div class="starter-template">
+				<h1>{{prod.p_name}}</h1>
+				<div class="smallsep">
+				</div>
+				<p class="lead">
+					{{prod.p_desc}}
+					<br />
+					{{prod.p_price}} Rs
+				</p>
+			</div>
+			{%if related%}
+				Related Products : 
+				<div class="row pricing">
+
+				{%for r in related%}
+					<div class="col-lg-3">
+						<div class='whitebox wow bounceIn animated
+								{%if r.company == "Nokia"%}salmonborder
+								{%elif r.company == "Micromax"%}goldborner
+								{%elif r.company == "Apple"%}blueborder
+								{%else%}greenborder{%endif%}'  
+								data-wow-delay="0.1s" data-wow-duration="2s">
+
+							<div class="content">
+								<p class="price">
+									 {{r.p_name}}
+								</p>
+								<ul>
+									<li>{{r.p_feature1}}</li>
+									<li>{{r.p_feature2}} </li>
+									<li>{{r.p_price}} Rs</li>
+									<li>{{r.p_desc}}</li>
+								</ul>
+								<a class="btn btn-lg"><i class="fa fa-shopping-cart"></i> Buy Now</a>
+							</div>
+						</div>
+					</div>				
+					{%endfor%}
+				</div>
+			{%endif%}
+		{%endif%}
+	</div>
+</section>
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/select2-3.5.1/select2.js"></script>
+<link href="/static/js/select2-3.5.1/select2.css" rel="stylesheet"/>
+<script src="/static/js/jquery.easing.min.js"></script>
+<script src="/static/js/wow.min.js"></script>
+<script src="/static/js/common.js"></script>
 
 <script>
 	$("#search").click(function(){
@@ -46,7 +143,9 @@
 		
 		location.href="/search/"+prod
 	});
-	$('#search_value').select2();
+	$('#search_value').select2({
+		 placeholder: "Select a Mobile"
+	 });
 </script>
 
 
