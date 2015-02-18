@@ -5,7 +5,9 @@ from django.http import HttpResponse
 from django.db.models import Q
 
 from sabwebs.models import product
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def home(request,prod_id=None):
 	products = product.objects.all()
 	if prod_id is not None:
