@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^$', 'sabwebs.views.home', name='home'),
     url(r'^search/(?P<prod_id>[-\w]+)$', 'sabwebs.views.home', name='home'),
     url(r'^get_products/$', 'sabwebs.views.get_products', name='get_products'),
+    url(r'^add_like_product/$','sabwebs.views.do_like',name="do_like"),
 )

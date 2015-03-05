@@ -76,7 +76,6 @@
 
 <!-- End of Home SCreen-->
 
-
 <!-- PRICING
 ================================================== -->
 <section id="pricing">
@@ -92,16 +91,18 @@
 					{{prod.p_price}} Rs
 				</p>
 			</div>
-			{%if related%}
-				<strong>Here are a few products we thought you might also like., </strong>
+			{%if liked_prod%}
+				<strong>Here are a few product, which are on your wishlist also matching your search </strong>
 				<br /> 
 				<div class="row pricing">
 
-				{%for r in related%}
+				{%for r in liked_prod%}
 					<div class="col-lg-3">
+                        <br />
+                        <br />
 						<div class='whitebox wow bounceIn animated
 								{%if r.company == "Nokia"%}salmonborder
-								{%elif r.company == "Micromax"%}goldborner
+								{%elif r.company == "Micromax"%}goldborder
 								{%elif r.company == "Apple"%}blueborder
 								{%else%}greenborder{%endif%}'  
 								data-wow-delay="0.1s" data-wow-duration="2s">
@@ -116,10 +117,43 @@
 									<li>{{r.p_price}} Rs</li>
 									<li>{{r.p_desc}}</li>
 								</ul>
-								<a class="btn btn-lg"><i class="fa fa-shopping-cart"></i> Buy Now</a>
+								<a class="btn btn-lg" id="uid_{{r.pid}}"><i class="fa fa-heart-o"></i>Unlike It</a>
 							</div>
 						</div>
-					</div>				
+					</div>
+					{%endfor%}
+				</div>
+            {%endif%}
+			{%if related%}
+				<strong>Here are a few products we thought you might also like., </strong>
+				<br /> 
+				<div class="row pricing">
+
+				{%for r in related%}
+					<div class="col-lg-3">
+                        <br />
+                        <br />
+						<div class='whitebox wow bounceIn animated
+								{%if r.company == "Nokia"%}salmonborder
+								{%elif r.company == "Micromax"%}goldborder
+								{%elif r.company == "Apple"%}blueborder
+								{%else%}greenborder{%endif%}'  
+								data-wow-delay="0.1s" data-wow-duration="2s">
+
+							<div class="content">
+								<p class="price">
+									 {{r.p_name}}
+								</p>
+								<ul>
+									<li>{{r.p_feature1}}</li>
+									<li>{{r.p_feature2}} </li>
+									<li>{{r.p_price}} Rs</li>
+									<li>{{r.p_desc}}</li>
+								</ul>
+								<a class="btn btn-lg" id="id_{{r.pid}}"><i class="fa fa-heart"></i> Like It</a>
+							</div>
+						</div>
+					</div>
 					{%endfor%}
 				</div>
 			{%endif%}
@@ -147,6 +181,24 @@
 	$('#search_value').select2({
 		 placeholder: "Select a Mobile"
 	 });
+    $("a[id*='id_']").click(function(){
+          var id = $(this) 
+          $.ajax({
+            url: '/add_like_product/',
+            method: 'POST',
+            data: {
+                'csrfmiddlewaretoken' : "{% csrf_token %}",
+                'pid' : this.id,
+            },
+            success: function(){
+                $(id).html('<i class="fa fa-heart"></i> Liked')
+            },
+            error: function(data){console.log(data)},
+          }) 
+        })
+    $("a[id*='uid_']").click(function(){
+            alert(this.id)
+        })
 </script>
 
 
