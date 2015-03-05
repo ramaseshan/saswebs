@@ -14,26 +14,32 @@ from django.contrib.auth.decorators import login_required
 def home(request,prod_id=None):
 	products = product.objects.all()
 	if prod_id is not None:
-		# try:
-		#     p = Poll.objects.get(pk=poll_id)
-		# except Poll.DoesNotExist:
-		#     raise Http404		
 		p = product.objects.get(pid=prod_id)
 		elevation = (p.p_price/100)*20
 		max_elevation = p.p_price + elevation
 		min_elevation = p.p_price - elevation
                 userliked = prod_user.objects.filter(uid=request.user.id)
-                liked_prod = product.objects.filter(
-				Q(p_feature1__startswith=p.p_feature1) | Q(p_feature2__startswith=p.p_feature2) |
-				Q(p_price__lte=max_elevation) , Q(p_price__gte=min_elevation), pid__in=prod_user.objects.filter(uid=request.user.id)
-			).exclude(pid=prod_id)[:10]
-                print liked_prod
-		related = product.objects.filter(
+                rel = product.objects.filter(
 				Q(p_feature1__startswith=p.p_feature1) | Q(p_feature2__startswith=p.p_feature2) |
 				Q(p_price__lte=max_elevation) , Q(p_price__gte=min_elevation)
-			).exclude(Q(pid__in=prod_user.objects.filter(uid=request.user.id))| Q(pid=prod_id))[:20]
-                print related
-		return render_to_response('index.html', {'prod': p,'products':products,'liked_prod':liked_prod,'related':related})
+			).exclude(pid=prod_id)[:10]
+                p_list = prod_user.objects.filter(uid=request.user)
+                r_list = []
+                ul_list = []
+                related = []
+                liked_prod = []
+                for r in rel:
+                         r_list.append(r.pid)
+                print r_list
+		for pl in p_list:
+                        if pl.pid.pid in r_list:
+                                print pl.pid.pid
+                                pro = product.objects.get(pid=pl.pid.pid)
+                                liked_prod.append(pro)
+                                r_list.remove(pl.pid.pid)
+                for r in r_list:
+                        related.append(product.objects.get(pid=r))
+                return render_to_response('index.html', {'prod': p,'products':products,'liked_prod':liked_prod,'related':related})
 	else:
 		return render_to_response('index.html',{'products':products})
 
