@@ -42,11 +42,19 @@ def do_like(request):
         pid = request.POST.get('pid').split('_')[1]
         prod = product.objects.get(pid=pid)
         user = User.objects.get(id=request.user.id)
-        print user
         clicked = prod_user.objects.create(uid=user,pid=prod,nclick=1)
-        print clicked
         clicked.save()
         return HttpResponse("Success")
+@csrf_exempt
+def undo_like(request):
+        pid = request.POST.get('pid').split('_')[1]
+        prod = product.objects.get(pid=pid)
+        user = User.objects.get(id=request.user.id)
+        clicked = prod_user.objects.filter(uid=user,pid=prod)
+        print clicked
+        clicked.delete()
+        return HttpResponse("Success")
+
 def get_products(request):
 	response_data = {}
 	response_data['message'] = {"id": "1", "text": "option1"},{"id": "2", "text": "option2"},{"id": "3", "text": "option3"}

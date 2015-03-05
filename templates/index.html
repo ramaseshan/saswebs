@@ -117,7 +117,7 @@
 									<li>{{r.p_price}} Rs</li>
 									<li>{{r.p_desc}}</li>
 								</ul>
-								<a class="btn btn-lg" id="uid_{{r.pid}}"><i class="fa fa-heart-o"></i>Unlike It</a>
+								<a class="btn btn-lg" id="ul_{{r.pid}}"><i class="fa fa-heart-o"></i>Unlike It</a>
 							</div>
 						</div>
 					</div>
@@ -182,12 +182,10 @@
 		 placeholder: "Select a Mobile"
 	 });
     $("a[id*='id_']").click(function(){
-          var id = $(this) 
           $.ajax({
             url: '/add_like_product/',
             method: 'POST',
             data: {
-                'csrfmiddlewaretoken' : "{% csrf_token %}",
                 'pid' : this.id,
             },
             success: function(){
@@ -195,10 +193,20 @@
             },
             error: function(data){console.log(data)},
           }) 
-        })
-    $("a[id*='uid_']").click(function(){
-            alert(this.id)
-        })
+        });
+    $("a[id*='ul_']").click(function(){
+          $.ajax({
+            url: '/undo_like_product/',
+            method: 'POST',
+            data: {
+                'pid' : this.id,
+            },
+            success: function(){
+                $(id).html('<i class="fa fa-heart"></i> Like It')
+            },
+            error: function(data){console.log(data)},
+          }); 
+      });
 </script>
 
 
