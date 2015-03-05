@@ -182,7 +182,8 @@
 		 placeholder: "Select a Mobile"
 	 });
     $("a[id*='id_']").click(function(){
-          $.ajax({
+        var id = $(this)
+        $.ajax({
             url: '/add_like_product/',
             method: 'POST',
             data: {
@@ -195,6 +196,7 @@
           }) 
         });
     $("a[id*='ul_']").click(function(){
+        var id = $(this)
           $.ajax({
             url: '/undo_like_product/',
             method: 'POST',
